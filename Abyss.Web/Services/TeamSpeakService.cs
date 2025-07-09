@@ -1,5 +1,7 @@
 ﻿using Abyss.Web.Data.Options;
 using Abyss.Web.Helpers.Interfaces;
+using Abyss.Web.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 
 namespace Abyss.Web.Services;
@@ -39,7 +41,10 @@ public class TeamSpeakService(ILogger<TeamSpeakService> logger, IOptions<TeamSpe
             using (var scope = _serviceProvider.CreateScope())
             {
                 var teamSpeakHelper = scope.ServiceProvider.GetRequiredService<ITeamSpeakHelper>();
-                await teamSpeakHelper.Update();
+                var onlineHub = scope.ServiceProvider.GetRequiredService<IHubContext<OnlineHub>>();
+                var clients = await teamSpeakHelper.GetClients();
+                var channels = await teamSpeakHelper.GetChannels();
+                await onlineHub.Clients.All.SendAsync("update", clients, channels);
             }
             _logger.LogDebug("TeamSpeak update complete");
         }

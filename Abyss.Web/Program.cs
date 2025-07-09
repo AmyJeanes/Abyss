@@ -136,7 +136,6 @@ public class Program
         services.AddTransient<ICloudflareHelper, CloudflareHelper>();
         services.AddTransient<IAzureHelper, AzureHelper>();
         services.AddTransient<IGModHelper, GModHelper>();
-        services.AddSingleton<ITeamSpeakHelper, TeamSpeakHelper>();
         services.AddSingleton<IQuoteHelper, QuoteHelper>();
         services.AddSingleton<IMinecraftHelper, MinecraftHelper>();
         services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
@@ -146,6 +145,11 @@ public class Program
         services.AddHttpClient<IGPTClient, GPTClient>(client =>
         {
             client.BaseAddress = new Uri(config["GPTClient:BaseUrl"]);
+        });
+        services.AddHttpClient<ITeamSpeakHelper, TeamSpeakHelper>(client =>
+        {
+            client.BaseAddress = new Uri(config["TeamSpeak:BaseUrl"]);
+            client.DefaultRequestHeaders.Add("X-Api-Key", config["TeamSpeak:ApiKey"]);
         });
         services.AddHttpClient<ISpaceEngineersHelper, SpaceEngineersHelper>();
         services.AddHttpClient<IOvhHelper, OvhHelper>(client =>

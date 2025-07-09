@@ -78,6 +78,7 @@ jobs:
           --set env.secret.Jwt__Key="${{ secrets.JWT_KEY }}" \
           --set env.secret.Pushover__ApiKey="${{ secrets.PUSHOVER_APIKEY }}" \
           --set env.secret.Pushover__UserKey="${{ secrets.PUSHOVER_USERKEY }}" \
+          --set env.secret.TeamSpeak__ApiKey="${{ secrets.TEAMSPEAK_APIKEY }}" \
           --set env.secret.Tumblr__ConsumerKey="${{ secrets.TUMBLR_CONSUMERKEY }}" \
           --set env.secret.Tumblr__ConsumerSecret="${{ secrets.TUMBLR_CONSUMERSECRET }}" \
           --set env.secret.Tumblr__Token="${{ secrets.TUMBLR_TOKEN }}" \
@@ -98,7 +99,7 @@ jobs:
           --set env.normal.GMod__BaseUrl="${{ vars.GMOD_BASEURL }}" \
           --set env.normal.QuoteOfTheDay__DiscordChannelId="${{ vars.QUOTEOFTHEDAY_DISCORDCHANNELID }}" \
           --set env.normal.Reminder__DiscordChannelId="${{ vars.REMINDER_DISCORDCHANNELID }}" \
-          --set env.normal.TeamSpeak__Host="${{ vars.TEAMSPEAK_HOST }}" \
+          --set env.normal.TeamSpeak__BaseUrl="${{ vars.TEAMSPEAK_BASEURL }}" \
           --set env.normal.Tumblr__BlogName="${{ vars.TUMBLR_BLOGNAME }}" \
           --set env.normal.GPTClient__BaseUrl="${{ vars.GPTCLIENT_BASEURL }}"
       working-directory: charts

@@ -1,126 +1,114 @@
 ﻿using Abyss.Web.Data.Options;
 using Abyss.Web.Data.TeamSpeak;
 using Abyss.Web.Helpers.Interfaces;
-using Abyss.Web.Hubs;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
-using TeamSpeak3QueryApi.Net.Specialized;
-using TeamSpeak3QueryApi.Net.Specialized.Responses;
+using System.Text.Json.Serialization;
 
 namespace Abyss.Web.Helpers;
 
 public class TeamSpeakHelper(
     IOptions<TeamSpeakOptions> options,
-    IHubContext<OnlineHub> onlineHub,
+    HttpClient httpClient,
     ILogger<TeamSpeakHelper> logger
-        ) : ITeamSpeakHelper, IDisposable
+        ) : ITeamSpeakHelper
 {
     private readonly TeamSpeakOptions _options = options.Value;
-    private readonly IHubContext<OnlineHub> _onlineHub = onlineHub;
+    private readonly HttpClient _httpClient = httpClient;
     private readonly ILogger<TeamSpeakHelper> _logger = logger;
-    private List<Client> _clients;
-    private List<Channel> _channels;
-    private Task _updateTask;
-    private TeamSpeakClient _teamspeak;
 
     public async Task<List<Client>> GetClients()
     {
-        if (_clients == null)
+        var clientListResponse = await _httpClient.GetAsync($"{_options.ServerId}/clientlist");
+        clientListResponse.EnsureSuccessStatusCode();
+        var clientListContent = await clientListResponse.Content.ReadFromJsonAsync<TeamSpeakResponse<List<TeamSpeakClientListResponse>>>();
+        var clients = new List<Client>();
+        foreach (var client in clientListContent.Body)
         {
-            await Update();
+            if (int.Parse(client.Type) != 0) { continue; }
+            var clientResponse = await _httpClient.GetAsync($"{_options.ServerId}/clientinfo?clid={client.Id}");
+            clientResponse.EnsureSuccessStatusCode();
+            var clientContent = await clientResponse.Content.ReadFromJsonAsync<TeamSpeakResponse<List<TeamSpeakClientResponse>>>();
+            var clientInfo = clientContent.Body.FirstOrDefault();
+            clients.Add(new Client
+            {
+                Name = client.Name,
+                ChannelId = int.Parse(client.ChannelId),
+                ConnectedSeconds = int.Parse(clientInfo.ConnectedMilliseconds) / 1000,
+                IdleSeconds = int.Parse(clientInfo.IdleMilliseconds) / 1000
+            });
         }
-        return _clients!;
+        return clients;
     }
 
     public async Task<List<Channel>> GetChannels()
     {
-        if (_channels == null)
+        var channelResponse = await _httpClient.GetAsync($"{_options.ServerId}/channellist");
+        channelResponse.EnsureSuccessStatusCode();
+        var channelContent = await channelResponse.Content.ReadFromJsonAsync<TeamSpeakResponse<List<TeamSpeakChannelResponse>>>();
+
+        return channelContent?.Body?.Select(c => new Channel
         {
-            await Update();
-        }
-        return _channels!;
+            Id = int.Parse(c.Id),
+            ParentId = int.Parse(c.ParentId),
+            Name = c.Name,
+        }).ToList() ?? [];
     }
 
-
-    public Task Update()
+    private class TeamSpeakResponse<T>
     {
-        if (_updateTask != null)
-        {
-            return _updateTask;
-        }
-        return _updateTask = Task.Run(async () =>
-        {
-            if (_teamspeak == null)
-            {
-                _teamspeak = new TeamSpeakClient(_options.Host);
-            }
-            try
-            {
-                if (!_teamspeak.Client.IsConnected)
-                {
-                    try
-                    {
-                        await _teamspeak.Connect();
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, $"Failed to connect to TeamSpeak, disposing and creating new client");
-                        _teamspeak.Dispose();
-                        _teamspeak = null;
-                        _teamspeak = new TeamSpeakClient(_options.Host);
-                        await _teamspeak.Connect();
-                    }
-                    await _teamspeak.UseServer(_options.ServerId);
-                    //await _teamspeak.ChangeNickName(_options.ClientName);
-                }
-                var rawChannels = await _teamspeak.GetChannels();
-                var channels = new List<Channel>();
-                foreach (var rawChannel in rawChannels)
-                {
-                    channels.Add(ConvertChannel(rawChannel, rawChannels, channels));
-                }
-                var rawClients = await _teamspeak.GetClients();
-                var rawDetailedClients = new List<GetClientDetailedInfo>();
-                foreach (var rawClient in rawClients.Where(x => x.Type == ClientType.FullClient))
-                {
-                    rawDetailedClients.Add(await _teamspeak.GetClientInfo(rawClient));
-                }
-                var clients = rawDetailedClients.Select(x => ConvertClient(x, channels)).ToList();
-
-                _channels = channels;
-                _clients = clients;
-                await _onlineHub.Clients.All.SendAsync("update", _clients, _channels);
-            }
-            finally
-            {
-                _updateTask = null;
-            }
-        });
+        public T Body { get; set; }
     }
 
-    private Channel ConvertChannel(GetChannelListInfo rawChannel, IReadOnlyList<GetChannelListInfo> rawChannels, List<Channel> channels)
+    private class TeamSpeakChannelResponse
     {
-        return new Channel
-        {
-            Id = rawChannel.Id,
-            Name = rawChannel.Name,
-            ParentId = rawChannel.ParentChannelId > 0 ? rawChannel.ParentChannelId : (int?)null
-        };
+        [JsonPropertyName("cid")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("pid")]
+        public string ParentId { get; set; }
+
+        [JsonPropertyName("channel_name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("channel_order")]
+        public string Order { get; set; }
     }
 
-    private Client ConvertClient(GetClientDetailedInfo rawClient, List<Channel> channels)
+    public enum TeamSpeakClientType
     {
-        return new Client
-        {
-            Name = rawClient.NickName,
-            ChannelId = rawClient.ChannelId,
-            ConnectedSeconds = (int)rawClient.ConnectionTime.TotalSeconds,
-            IdleSeconds = (int)rawClient.IdleTime.TotalSeconds
-        };
+        Normal = 0,
+        Query = 1,
+        ServerQuery = 2,
+        VirtualServer = 3
     }
 
-    public void Dispose()
+    private class TeamSpeakClientListResponse
     {
-        ((IDisposable)_teamspeak)?.Dispose();
+        [JsonPropertyName("clid")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("client_nickname")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("cid")]
+        public string ChannelId { get; set; }
+
+        [JsonPropertyName("client_type")]
+        public string Type { get; set; }
+    }
+
+    private class TeamSpeakClientResponse
+    {
+        [JsonPropertyName("cid")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("client_nickname")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("client_idle_time")]
+        public string IdleMilliseconds { get; set; }
+
+        [JsonPropertyName("connection_connected_time")]
+        public string ConnectedMilliseconds { get; set; }
     }
 }
