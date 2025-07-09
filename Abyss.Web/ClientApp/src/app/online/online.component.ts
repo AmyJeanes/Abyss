@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
 import { MomentModule } from 'ngx-moment';
@@ -22,6 +23,7 @@ import { DialogService } from '../services';
         MatButtonModule,
         MatTableModule,
         MatCardModule,
+        MatTooltipModule,
     ],
     providers: [
         OnlineService,
@@ -117,5 +119,29 @@ export class OnlineComponent implements OnInit, OnDestroy {
             console.error(e);
             return 'Error';
         }
+    }
+
+    public getConnectedTimeTooltip(seconds: number): string {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+
+        const hourLabel = hours === 1 ? 'hour' : 'hours';
+        const minuteLabel = minutes === 1 ? 'minute' : 'minutes';
+
+        return `${hours} ${hourLabel} and ${minutes} ${minuteLabel} ago`;
+    }
+
+    public getIdleTimeTooltip(seconds: number): string {
+        const hrs = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+
+        const hStr = hrs > 0 ? `${hrs} ${hrs === 1 ? 'hour' : 'hours'}` : '';
+        const mStr = mins > 0 ? `${mins} ${mins === 1 ? 'minute' : 'minutes'}` : '';
+        const sStr = secs > 0 || (hrs === 0 && mins === 0) ? `${secs} ${secs === 1 ? 'second' : 'seconds'}` : '';
+
+        const parts = [hStr, mStr, sStr].filter(part => part !== '');
+
+        return parts.join(' and ') + ' ago';
     }
 }
