@@ -5,7 +5,7 @@ USER app
 WORKDIR /app
 EXPOSE 8080
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0@sha256:3da7c4198dc77b50aeaf76f262ed0ac2ed324f87fba4b5b0f0bc0b4fbbf2ad93 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0@sha256:670ef9e8eca44c8baa0bd1c229ccde9537064260ef14d54738b7a87916609312 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Abyss.Web/Abyss.Web.csproj", "Abyss.Web/"]
