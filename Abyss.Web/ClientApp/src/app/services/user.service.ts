@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { IAuthResult, IUser } from '../app.data';
@@ -9,7 +9,10 @@ import { DialogService } from './dialog.service';
 
 @Injectable()
 export class UserService {
-    constructor(private httpClient: HttpClient, private authService: AuthService, private dialogService: DialogService) { }
+    private httpClient = inject(HttpClient);
+    private authService = inject(AuthService);
+    private dialogService = inject(DialogService);
+
     public async changeUsername(username?: string): Promise<void> {
         const user = this.authService.getUser();
         const currentUsername = user ? user.Name : undefined;

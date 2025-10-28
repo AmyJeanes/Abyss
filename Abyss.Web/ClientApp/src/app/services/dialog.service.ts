@@ -1,4 +1,4 @@
-import { Component, Inject, Injectable } from '@angular/core';
+import { Component, Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,8 @@ const DIALOG_DEFAULT_CANCEL_TEXT = 'Cancel';
 
 @Injectable()
 export class DialogService {
-    constructor(private dialog: MatDialog) { }
+    private dialog = inject(MatDialog);
+
 
     public async alert(alert: IDialogAlert): Promise<void> {
         return new Promise<void>((resolve) => {
@@ -88,10 +89,9 @@ export class DialogService {
     ]
 })
 export class DialogAlertComponent {
-    constructor(
-        public dialogRef: MatDialogRef<DialogAlertComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: IDialogAlert,
-    ) { }
+    dialogRef = inject<MatDialogRef<DialogAlertComponent>>(MatDialogRef);
+    data = inject<IDialogAlert>(MAT_DIALOG_DATA);
+
 
     onNoClick(): void {
         this.dialogRef.close();
@@ -120,10 +120,9 @@ export class DialogAlertComponent {
     ]
 })
 export class DialogConfirmComponent {
-    constructor(
-        public dialogRef: MatDialogRef<DialogConfirmComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: IDialogConfirm,
-    ) { }
+    dialogRef = inject<MatDialogRef<DialogConfirmComponent>>(MatDialogRef);
+    data = inject<IDialogConfirm>(MAT_DIALOG_DATA);
+
 
     onNoClick(): void {
         this.dialogRef.close();
@@ -155,10 +154,9 @@ export class DialogConfirmComponent {
     ]
 })
 export class DialogPromptComponent {
-    constructor(
-        public dialogRef: MatDialogRef<DialogPromptComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: IDialogPrompt,
-    ) { }
+    dialogRef = inject<MatDialogRef<DialogPromptComponent>>(MatDialogRef);
+    data = inject<IDialogPrompt>(MAT_DIALOG_DATA);
+
 
     onNoClick(): void {
         this.dialogRef.close();

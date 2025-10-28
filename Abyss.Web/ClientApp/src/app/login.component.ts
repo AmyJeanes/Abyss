@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
@@ -8,7 +8,11 @@ import { AuthService, DialogService } from './services';
     template: 'Please wait, logging in..',
 })
 export class LoginComponent implements OnInit {
-    constructor(private authService: AuthService, private router: Router, private activatedRoute: ActivatedRoute, private dialogService: DialogService) { }
+    private authService = inject(AuthService);
+    private router = inject(Router);
+    private activatedRoute = inject(ActivatedRoute);
+    private dialogService = inject(DialogService);
+
 
     public async ngOnInit(): Promise<void> {
         try {

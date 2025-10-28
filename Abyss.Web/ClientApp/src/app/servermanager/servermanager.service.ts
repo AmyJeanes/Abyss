@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { IServer } from '../app.data';
 
 @Injectable()
 export class ServerManagerService {
-    constructor(private httpClient: HttpClient) { }
+    private httpClient = inject(HttpClient);
+
     public getServers(): Promise<IServer[]> {
         return firstValueFrom(this.httpClient.get<IServer[]>('/api/server'));
     }

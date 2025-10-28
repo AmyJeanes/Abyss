@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { firstValueFrom } from 'rxjs';
@@ -8,7 +8,10 @@ import { IAuthResult, IAuthScheme, IClientUser, IToken } from '../app.data';
 
 @Injectable()
 export class AuthService {
-    constructor(private httpClient: HttpClient, private jwtHelperService: JwtHelperService, private router: Router) { }
+    private httpClient = inject(HttpClient);
+    private jwtHelperService = inject(JwtHelperService);
+    private router = inject(Router);
+
     public async getNewToken(scheme?: string): Promise<IAuthResult> {
         const result = await firstValueFrom(this.httpClient.post<IAuthResult>(`/api/auth/token/${scheme ? scheme : ''}`, undefined));
         this.setToken(result.Token);

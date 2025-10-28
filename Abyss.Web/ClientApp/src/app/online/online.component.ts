@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -30,6 +30,10 @@ import { DialogService } from '../services';
     ],
 })
 export class OnlineComponent implements OnInit, OnDestroy {
+    onlineService = inject(OnlineService);
+    dialogService = inject(DialogService);
+    private ngZone = inject(NgZone);
+
     public clients: ITeamSpeakClient[] = [];
     public displayedColumns = ['name', 'channelName', 'connectedTime', 'idleTime'];
     public channels: ITeamSpeakChannel[] = [];
@@ -39,7 +43,7 @@ export class OnlineComponent implements OnInit, OnDestroy {
         .withAutomaticReconnect()
         .build();
     private hubReady = false;
-    constructor(public onlineService: OnlineService, public dialogService: DialogService, private ngZone: NgZone) {
+    constructor() {
         this.hub.on('update', (clients: ITeamSpeakClient[], channels: ITeamSpeakChannel[]) => {
             // Because this is a call from the server, Angular change detection won't detect it so we must force ngZone to run
             this.ngZone.run(() => {

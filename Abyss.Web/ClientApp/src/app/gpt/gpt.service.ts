@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { IGPTRequest, IGPTResponse, IGPTModel } from '../app.data';
 
 @Injectable()
 export class GPTService {
-    constructor(private httpClient: HttpClient) { }
+    private httpClient = inject(HttpClient);
+
 
     public generate(message: IGPTRequest): Promise<IGPTResponse> {
         return firstValueFrom(this.httpClient.post<IGPTResponse>('/api/gpt', message));

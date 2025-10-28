@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ThemePalette } from '@angular/material/core';
 import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
@@ -58,16 +58,16 @@ import { AccountDialogComponent } from './shared/account-dialog.component';
     ]
 })
 export class AppComponent implements OnInit {
+    authService = inject(AuthService);
+    errorService = inject(ErrorService);
+    router = inject(Router);
+    private dialog = inject(MatDialog);
+    private dialogService = inject(DialogService);
+    private titleService = inject(TitleService);
+    private activatedRoute = inject(ActivatedRoute);
+
     public Permissions = Permissions;
-    constructor(
-        public authService: AuthService,
-        public errorService: ErrorService,
-        public router: Router,
-        private dialog: MatDialog,
-        private dialogService: DialogService,
-        private titleService: TitleService,
-        private activatedRoute: ActivatedRoute,
-    ) {
+    constructor() {
         this.router.events
             .pipe(
                 filter(event => event instanceof NavigationEnd),

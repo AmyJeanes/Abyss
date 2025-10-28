@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { IAuthScheme, IClientUserAuthentication, IClientUser } from '../app.data';
@@ -25,6 +25,11 @@ import { MatButtonModule } from '@angular/material/button';
     ]
 })
 export class AccountDialogComponent implements OnInit {
+    dialogRef = inject<MatDialogRef<AccountDialogComponent>>(MatDialogRef);
+    authService = inject(AuthService);
+    userService = inject(UserService);
+    private dialogService = inject(DialogService);
+
     public schemes?: IAuthScheme[];
     public selected?: IAuthScheme;
     public loading = false;
@@ -37,12 +42,6 @@ export class AccountDialogComponent implements OnInit {
     public get onlyScheme(): boolean {
         return Object.keys(this.userSchemes).length <= 1;
     }
-    constructor(
-        public dialogRef: MatDialogRef<AccountDialogComponent>,
-        public authService: AuthService,
-        public userService: UserService,
-        private dialogService: DialogService
-    ) { }
 
     public async ngOnInit(): Promise<void> {
         try {

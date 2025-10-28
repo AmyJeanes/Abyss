@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 export const TITLE_PREFIX = 'Abyss - ';
 
 @Injectable()
 export class TitleService {
-    constructor(private title: Title) {}
+    private title = inject(Title);
+
 
     getTitle(): string {
         return this.title.getTitle();

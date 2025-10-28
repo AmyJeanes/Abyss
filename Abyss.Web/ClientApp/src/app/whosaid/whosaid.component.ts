@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,12 +28,13 @@ import { DialogService } from '../services';
     ],
 })
 export class WhoSaidComponent {
+    private whoSaidService = inject(WhoSaidService);
+    private dialogService = inject(DialogService);
+
     public name = 'Someone';
     public log: IWhoSaid[] = [];
     public loading = false;
     public message = '';
-
-    constructor(private whoSaidService: WhoSaidService, private dialogService: DialogService) { }
 
     public async whoSaid(): Promise<void> {
         try {

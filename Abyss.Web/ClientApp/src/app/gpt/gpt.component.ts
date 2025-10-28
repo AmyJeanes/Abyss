@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,6 +36,9 @@ import { DialogService } from '../services';
     ],
 })
 export class GPTComponent implements OnInit {
+    private gptService = inject(GPTService);
+    private dialogService = inject(DialogService);
+
     public name = 'Someone';
     public log: IGPTMessage[] = [];
     public loading = false;
@@ -69,8 +72,6 @@ export class GPTComponent implements OnInit {
     }
     public message = '';
     public models: IGPTModel[] = [];
-
-    constructor(private gptService: GPTService, private dialogService: DialogService) { }
 
     public async ngOnInit(): Promise<void> {
         try {

@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest, HttpEvent } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { from, throwError, Observable } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 
@@ -7,8 +7,9 @@ import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+    private authService = inject(AuthService);
+
     private refreshing?: Promise<void>;
-    constructor(private authService: AuthService) { }
     public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
         if (!this.requestNeedsAuth(req)) {
             return this.handle(req, next);

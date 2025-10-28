@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -23,11 +23,12 @@ import { DialogService } from '../services';
     ]
 })
 export class UserManagerComponent implements OnInit {
+    userManagerService = inject(UserManagerService);
+    dialogService = inject(DialogService);
+
     public users: IUser[] = [];
     public displayedColumns = ['id', 'name', 'roleName', 'authTypes'];
     public loading: boolean = false;
-
-    constructor(public userManagerService: UserManagerService, public dialogService: DialogService) { }
 
     public async ngOnInit(): Promise<void> {
         await this.refresh();

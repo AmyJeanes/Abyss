@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,6 +34,10 @@ import { DialogService } from '../services';
     ],
 })
 export class ServerManagerComponent implements OnInit, OnDestroy {
+    serverManagerService = inject(ServerManagerService);
+    dialogService = inject(DialogService);
+    private ngZone = inject(NgZone);
+
     public servers?: IServer[];
     public ServerStatus = ServerStatus;
     public selectedId?: string;
@@ -48,7 +52,7 @@ export class ServerManagerComponent implements OnInit, OnDestroy {
 
     public get selected(): IServer | undefined { return this.servers ? this.servers.find(x => x.Id === this.selectedId) : undefined; }
 
-    constructor(public serverManagerService: ServerManagerService, public dialogService: DialogService, private ngZone: NgZone) {
+    constructor() {
         this.hub.on('status', (status: ServerStatus) => {
             this.ngZone.run(() => {
                 let selectedServer = this.selected;
