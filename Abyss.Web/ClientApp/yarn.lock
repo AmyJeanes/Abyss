@@ -247,7 +247,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/build@^20.3.7":
+"@angular/build@20.3.7":
   version "20.3.7"
   resolved "https://registry.yarnpkg.com/@angular/build/-/build-20.3.7.tgz#21e4a9e457a53e604e8375ac956cc17eab4d4a7b"
   integrity sha512-NHN5JNDqUc0Ux4IZPCe/fpFAnuRHujkxVfRHSqDFW5+jtj2JuW1XO6qlX+kDheFRlj/NvFgTpidKsE9IjpfMWQ==
