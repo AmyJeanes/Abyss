@@ -11,7 +11,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OpenId.Steam" Version="9.0.0" />
+    <PackageReference Include="AspNet.Security.OpenId.Steam" Version="10.0.0" />
     <PackageReference Include="AspNet.Security.OAuth.Discord" Version="10.0.0" />
     <PackageReference Include="Azure.ResourceManager.Network" Version="1.13.0" />
     <PackageReference Include="CoreRCON" Version="5.4.2" />
