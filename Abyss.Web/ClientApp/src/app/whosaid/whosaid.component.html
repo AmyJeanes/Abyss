@@ -1,27 +1,35 @@
 <h1>Who Said It?</h1>
 <div class="main">
-    <div class="name">{{ name }}:</div>
-    <mat-form-field class="field" subscriptSizing="dynamic">
-        <input class="input" matInput placeholder="Message" type="text" [(ngModel)]="message"
-            (keyup.enter)="whoSaid()" />
-        <button mat-icon-button matSuffix *ngIf="message" aria-label="Clear" (click)="message=''">
-            <mat-icon>close</mat-icon>
+  <div class="name">{{ name }}:</div>
+  <mat-form-field class="field" subscriptSizing="dynamic">
+    <input class="input" matInput placeholder="Message" type="text" [(ngModel)]="message"
+      (keyup.enter)="whoSaid()" />
+      @if (message) {
+        <button mat-icon-button matSuffix aria-label="Clear" (click)="message=''">
+          <mat-icon>close</mat-icon>
         </button>
+      }
     </mat-form-field>
     <div class="button">
-        <button [disabled]="loading || !message" mat-fab (click)="whoSaid()">
-            <mat-icon>search</mat-icon>
-        </button>
+      <button [disabled]="loading || !message" mat-fab (click)="whoSaid()">
+        <mat-icon>search</mat-icon>
+      </button>
     </div>
-</div>
-<br />
-<div class="log">
-    <button mat-raised-button (click)="clear()" *ngIf="log.length">Clear</button>
+  </div>
+  <br />
+  <div class="log">
+    @if (log.length) {
+      <button mat-raised-button (click)="clear()">Clear</button>
+    }
     &nbsp;
-    <button mat-raised-button (click)="undo()" *ngIf="log.length">Undo</button>
+    @if (log.length) {
+      <button mat-raised-button (click)="undo()">Undo</button>
+    }
     <br />
     <br />
-    <div *ngFor="let logItem of log">
+    @for (logItem of log; track logItem) {
+      <div>
         {{ logItem.Name }}: {{ logItem.Message }}
-    </div>
-</div>
+      </div>
+    }
+  </div>

@@ -1,37 +1,47 @@
 <h1>Server Manager</h1>
 <div class="select">
-    <mat-form-field subscriptSizing="dynamic">
-        <mat-select [disabled]="loading" placeholder="Select server" [(ngModel)]="selectedId">
-            <mat-option *ngFor="let server of servers" [value]="server.Id">{{ server.Name }}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <div class="button">
-        <button [disabled]="loading" mat-fab (click)="refresh()">
-            <mat-icon>refresh</mat-icon>
-        </button>
-    </div>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-select [disabled]="loading" placeholder="Select server" [(ngModel)]="selectedId">
+      @for (server of servers; track server) {
+        <mat-option [value]="server.Id">{{ server.Name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div class="button">
+    <button [disabled]="loading" mat-fab (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 </div>
 <h2>
-    Status: {{ selected ? ServerStatus[selected.StatusId] : 'N/A' }}
-    &nbsp;
-    &nbsp;
-    <mat-progress-spinner class="spinner" *ngIf="loading || !hubReady" mode="indeterminate" [diameter]="30"></mat-progress-spinner>
+  Status: {{ selected ? ServerStatus[selected.StatusId] : 'N/A' }}
+  &nbsp;
+  &nbsp;
+  @if (loading || !hubReady) {
+    <mat-progress-spinner class="spinner" mode="indeterminate" [diameter]="30"></mat-progress-spinner>
+  }
 </h2>
 <button mat-raised-button [disabled]="!selected || loading || !hubReady || selected.StatusId !== ServerStatus.Inactive" (click)="start()">Start</button>
 &nbsp;
 <button mat-raised-button [disabled]="!selected || loading || !hubReady || selected.StatusId !== ServerStatus.Active" (click)="stop()">Stop</button>
 
-<div class="command-container" *ngIf="selected && selected.StatusId === ServerStatus.Active">
+@if (selected && selected.StatusId === ServerStatus.Active) {
+  <div class="command-container">
     <h3>Execute Command</h3>
     <div class="command-input">
-        <mat-form-field appearance="fill" class="command-field" subscriptSizing="dynamic">
-            <mat-label>Command</mat-label>
-            <input #commandInput matInput type="text" [(ngModel)]="command" [disabled]="!hubReady" 
-                   (keyup.enter)="executeCommand()" placeholder="Enter server command">
+      <mat-form-field appearance="fill" class="command-field" subscriptSizing="dynamic">
+        <mat-label>Command</mat-label>
+        <input #commandInput matInput type="text" [(ngModel)]="command" [disabled]="!hubReady"
+          (keyup.enter)="executeCommand()" placeholder="Enter server command">
         </mat-form-field>
         <button mat-raised-button color="primary" [disabled]="!command || loading || !hubReady" (click)="executeCommand()">Execute</button>
+      </div>
     </div>
-</div>
+  }
 
-<h2 *ngIf="log.length > 0">Log</h2>
-<pre *ngFor="let line of log.slice().reverse()">{{ line }}</pre>
+  @if (log.length > 0) {
+    <h2>Log</h2>
+  }
+  @for (line of log.slice().reverse(); track line) {
+    <pre>{{ line }}</pre>
+  }

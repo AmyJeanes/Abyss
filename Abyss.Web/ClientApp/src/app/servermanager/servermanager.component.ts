@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,15 +20,14 @@ import { DialogService } from '../services';
     templateUrl: './servermanager.component.html',
     styleUrls: ['./servermanager.component.scss'],
     imports: [
-        FormsModule,
-        CommonModule,
-        MatSelectModule,
-        MatButtonModule,
-        MatProgressSpinnerModule,
-        MatIconModule,
-        MatInputModule,
-        MatFormFieldModule,
-    ],
+    FormsModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule
+],
     providers: [
         ServerManagerService
     ],

@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -12,12 +12,11 @@ import { DialogService } from '../services';
 @Component({
     templateUrl: './usermanager.component.html',
     imports: [
-        CommonModule,
-        MatTableModule,
-        MatCardModule,
-        MatProgressSpinnerModule,
-        MatButtonModule,
-    ],
+    MatTableModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatButtonModule
+],
     providers: [
         UserManagerService,
     ]

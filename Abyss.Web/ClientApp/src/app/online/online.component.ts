@@ -1,5 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -18,13 +18,12 @@ import { DialogService } from '../services';
     templateUrl: './online.component.html',
     styleUrls: ['./online.component.scss'],
     imports: [
-        CommonModule,
-        MomentModule,
-        MatButtonModule,
-        MatTableModule,
-        MatCardModule,
-        MatTooltipModule,
-    ],
+    MomentModule,
+    MatButtonModule,
+    MatTableModule,
+    MatCardModule,
+    MatTooltipModule
+],
     providers: [
         OnlineService,
     ],

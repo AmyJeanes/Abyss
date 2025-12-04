@@ -1,21 +1,29 @@
 <div class="wrapper">
-    <div class="content">
-        <div class="header">
-            <span class="title">Abyss</span>
-            <span class="spacer"></span>
-            <button mat-icon-button (click)="showAccountDialog()" matTooltip="{{authService.isLoggedIn() ? 'Logged in as ' + username : 'Login'}}">
-                <mat-icon>account_circle</mat-icon>
-            </button>
-        </div>
-        <div class="nav">
-            <button mat-raised-button [color]="getTabColor('/')" routerLink="/">Home</button>
-            <button mat-raised-button [color]="getTabColor('/online')" routerLink="/online">Online</button>
-            <button mat-raised-button [color]="getTabColor('/gpt')" routerLink="/gpt">GPT</button>
-            <button mat-raised-button *ngIf="authService.hasPermission(Permissions.UserManager)" [color]="getTabColor('/usermanager')" routerLink="/usermanager">User Manager</button>
-            <button mat-raised-button *ngIf="authService.hasPermission(Permissions.ServerManager)" [color]="getTabColor('/servermanager')" routerLink="/servermanager">Server Manager</button>
-            <button mat-raised-button *ngIf="authService.hasPermission(Permissions.WhoSaid)" [color]="getTabColor('/whosaid')" routerLink="/whosaid">Who Said</button>
-            <button mat-raised-button *ngIf="authService.hasPermission(Permissions.ErrorViewer)" (click)="errorService.openErrors()">Errors</button>
-        </div>
-        <router-outlet></router-outlet>
+  <div class="content">
+    <div class="header">
+      <span class="title">Abyss</span>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="showAccountDialog()" matTooltip="{{authService.isLoggedIn() ? 'Logged in as ' + username : 'Login'}}">
+        <mat-icon>account_circle</mat-icon>
+      </button>
     </div>
+    <div class="nav">
+      <button mat-raised-button [color]="getTabColor('/')" routerLink="/">Home</button>
+      <button mat-raised-button [color]="getTabColor('/online')" routerLink="/online">Online</button>
+      <button mat-raised-button [color]="getTabColor('/gpt')" routerLink="/gpt">GPT</button>
+      @if (authService.hasPermission(Permissions.UserManager)) {
+        <button mat-raised-button [color]="getTabColor('/usermanager')" routerLink="/usermanager">User Manager</button>
+      }
+      @if (authService.hasPermission(Permissions.ServerManager)) {
+        <button mat-raised-button [color]="getTabColor('/servermanager')" routerLink="/servermanager">Server Manager</button>
+      }
+      @if (authService.hasPermission(Permissions.WhoSaid)) {
+        <button mat-raised-button [color]="getTabColor('/whosaid')" routerLink="/whosaid">Who Said</button>
+      }
+      @if (authService.hasPermission(Permissions.ErrorViewer)) {
+        <button mat-raised-button (click)="errorService.openErrors()">Errors</button>
+      }
+    </div>
+    <router-outlet></router-outlet>
+  </div>
 </div>

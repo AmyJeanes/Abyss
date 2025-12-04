@@ -1,7 +1,7 @@
 import { Component, Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CommonModule } from '@angular/common';
+
 
 import { IDialogAlert, IDialogConfirm, IDialogPrompt } from '../app.data';
 import { FormsModule } from '@angular/forms';
@@ -74,19 +74,20 @@ export class DialogService {
 @Component({
     selector: 'app-dialog-alert',
     template: `
-    <h1 mat-dialog-title *ngIf="data.title">{{data.title}}</h1>
+    @if (data.title) {
+      <h1 mat-dialog-title>{{data.title}}</h1>
+    }
     <div mat-dialog-content>
-    <span class="dialog-message">{{data.message}}</span>
+      <span class="dialog-message">{{data.message}}</span>
     </div>
     <div mat-dialog-actions class="dialog-actions">
-        <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.closeButtonText}}</button>
+      <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.closeButtonText}}</button>
     </div>
     `,
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-    ]
+    MatDialogModule,
+    MatButtonModule
+]
 })
 export class DialogAlertComponent {
     dialogRef = inject<MatDialogRef<DialogAlertComponent>>(MatDialogRef);
@@ -101,23 +102,24 @@ export class DialogAlertComponent {
 @Component({
     selector: 'app-dialog-confirm',
     template: `
-    <h1 mat-dialog-title *ngIf="data.title">{{data.title}}</h1>
+    @if (data.title) {
+      <h1 mat-dialog-title>{{data.title}}</h1>
+    }
     <div mat-dialog-content>
-    <span class="dialog-message">{{data.message}}</span>
+      <span class="dialog-message">{{data.message}}</span>
     </div>
     <div mat-dialog-actions class="dialog-actions">
-        <button mat-button [mat-dialog-close]="false">{{data.cancelButtonText}}</button>
-        <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.confirmButtonText}}</button>
+      <button mat-button [mat-dialog-close]="false">{{data.cancelButtonText}}</button>
+      <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.confirmButtonText}}</button>
     </div>
     `,
     imports: [
-        CommonModule,
-        FormsModule,
-        MatDialogModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatButtonModule,
-    ]
+    FormsModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule
+]
 })
 export class DialogConfirmComponent {
     dialogRef = inject<MatDialogRef<DialogConfirmComponent>>(MatDialogRef);
@@ -132,26 +134,27 @@ export class DialogConfirmComponent {
 @Component({
     selector: 'app-dialog-prompt',
     template: `
-    <h1 mat-dialog-title *ngIf="data.title">{{data.title}}</h1>
+    @if (data.title) {
+      <h1 mat-dialog-title>{{data.title}}</h1>
+    }
     <div mat-dialog-content>
-    <span class="dialog-message">{{data.message}}</span>
-    <mat-form-field class="dialog-input">
+      <span class="dialog-message">{{data.message}}</span>
+      <mat-form-field class="dialog-input">
         <input matInput [(ngModel)]="data.value" cdkFocusInitial>
-    </mat-form-field>
+      </mat-form-field>
     </div>
     <div mat-dialog-actions class="dialog-actions">
-        <button mat-button (click)="onNoClick()">{{data.cancelButtonText}}</button>
-        <button mat-button color="accent" [mat-dialog-close]="data.value">{{data.acceptButtonText}}</button>
+      <button mat-button (click)="onNoClick()">{{data.cancelButtonText}}</button>
+      <button mat-button color="accent" [mat-dialog-close]="data.value">{{data.acceptButtonText}}</button>
     </div>
     `,
     imports: [
-        CommonModule,
-        FormsModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatDialogModule,
-        MatButtonModule,
-    ]
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatButtonModule
+]
 })
 export class DialogPromptComponent {
     dialogRef = inject<MatDialogRef<DialogPromptComponent>>(MatDialogRef);

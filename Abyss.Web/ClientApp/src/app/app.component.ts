@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CommonModule } from '@angular/common';
+
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { filter, map } from 'rxjs/operators';
@@ -25,18 +25,17 @@ import { AccountDialogComponent } from './shared/account-dialog.component';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     imports: [
-        CommonModule,
-        FormsModule,
-        MatButtonModule,
-        MatListModule,
-        MatTooltipModule,
-        MatIconModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        RouterModule,
-    ],
+    FormsModule,
+    MatButtonModule,
+    MatListModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    RouterModule
+],
     providers: [
         AuthService,
         UserService,
