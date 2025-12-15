@@ -340,10 +340,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/compiler-cli@21.0.4":
-  version "21.0.4"
-  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-21.0.4.tgz#1f67f23d4bab8c13a3521cf90f2278b199974dda"
-  integrity sha512-CZeTia783iQ2Pp8ulWa2itTKC4YW7gBM0H4MDc4wbKlN2NSNzzUlttL5sQ4lKKq8DUZk3Cmj3DfJbwsECtQe5Q==
+"@angular/compiler-cli@21.0.5":
+  version "21.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-21.0.5.tgz#343ce4bc63703f9ac0a4b979ae5dedf869f06d8f"
+  integrity sha512-45sFKqt+badXl6Ab2XsxuOsdi0BbIZgcc9TdwmFPdXMNfcSUYDcPiOA0l1iPwDIZiu4VyqzepMfnHB9IwCatgA==
   dependencies:
     "@babel/core" "7.28.4"
     "@jridgewell/sourcemap-codec" "^1.4.14"
