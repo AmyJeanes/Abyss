@@ -32,7 +32,7 @@
     <PackageReference Include="NewTumblrSharp" Version="1.2.1.160" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
-    <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02563" />
+    <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02564" />
     <PackageReference Include="Microsoft.ML" Version="5.0.0" />
     <PackageReference Include="Azure.ResourceManager.Compute" Version="1.13.0" />
     <PackageReference Include="Azure.ResourceManager" Version="1.13.2" />
