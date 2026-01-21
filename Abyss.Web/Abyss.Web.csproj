@@ -34,7 +34,7 @@
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
     <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02566" />
     <PackageReference Include="Microsoft.ML" Version="5.0.0" />
-    <PackageReference Include="Azure.ResourceManager.Compute" Version="1.13.0" />
+    <PackageReference Include="Azure.ResourceManager.Compute" Version="1.14.0" />
     <PackageReference Include="Azure.ResourceManager" Version="1.13.2" />
     <PackageReference Include="Azure.Identity" Version="1.17.1" />
     <PackageReference Include="RestSharp" Version="113.1.0" />
