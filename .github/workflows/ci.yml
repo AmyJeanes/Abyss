@@ -65,14 +65,14 @@ jobs:
         serviceTokenId: ${{ vars.CLOUDFLARE_TUNNEL_SERVICE_TOKEN_ID }}
         serviceTokenSecret: ${{ secrets.CLOUDFLARE_TUNNEL_SERVICE_TOKEN_SECRET }}
 
-    - name: Install persistent volume for models
+    - name: Install persistent volume for abyss-models
       run: |
         helm upgrade --install --wait --atomic --debug \
-          models-persistentvolume . \
+          abyss-models-persistentvolume . \
           --namespace default \
-          --set name=models \
+          --set name=abyss-models \
           --set disk.capacity=16Mi \
-          --set volumeHandle=models \
+          --set volumeHandle=abyss-models \
           --set dataEngine=v2
       working-directory: infrastructure/kubernetes/charts/longhorn-persistentvolume
 

@@ -73,7 +73,7 @@ spec:
       volumes:
       - name: models
         persistentVolumeClaim:
-          claimName: models
+          claimName: abyss-models
       - name: kube-api-access
         projected:
           defaultMode: 420
