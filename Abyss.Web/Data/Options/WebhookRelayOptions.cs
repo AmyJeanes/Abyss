@@ -1,4 +1,4 @@
-﻿namespace Abyss.Web.Data.Options;
+namespace Abyss.Web.Data.Options;
 
 public class WebhookRelayOptions
 {
@@ -6,6 +6,7 @@ public class WebhookRelayOptions
     {
         public string Key { get; set; }
         public List<string> Urls { get; set; }
+        public bool IgnoreBots { get; set; }
     }
 
     public Dictionary<string, WebhookRelay> Relays { get; set; }

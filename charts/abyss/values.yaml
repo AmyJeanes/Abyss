@@ -52,5 +52,6 @@ env:
     Reminder__DiscordChannelId: ""
     TeamSpeak__BaseUrl: ""
     Tumblr__BlogName: ""
+    WebhookRelay__Relays__GitHub__IgnoreBots: "true"
     WhoSaidIt__ModelPath: "/opt/models/whosaidit.zip"
     GPTClient__BaseUrl: ""

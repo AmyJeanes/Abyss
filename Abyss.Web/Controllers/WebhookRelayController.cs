@@ -1,7 +1,8 @@
-﻿using Abyss.Web.Data.Options;
+using Abyss.Web.Data.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
+using System.Text.Json;
 
 namespace Abyss.Web.Controllers;
 
@@ -32,6 +33,16 @@ public class WebhookRelayController : Controller
             return Unauthorized();
         }
 
+        using var bodyStream = new MemoryStream();
+        await Request.Body.CopyToAsync(bodyStream);
+        var body = bodyStream.ToArray();
+
+        var (sender, isBot) = GetSender(body);
+        if (relay.Value.IgnoreBots && isBot)
+        {
+            return Ok($"Ignored webhook from '{sender}'");
+        }
+
         var statusCode = HttpStatusCode.Accepted;
         var resp = string.Empty;
         foreach (var url in relay.Value.Urls)
@@ -40,12 +51,9 @@ public class WebhookRelayController : Controller
             foreach (var header in Request.Headers.Where(x => x.Key != "Host"))
             {
                 req.Headers.TryAddWithoutValidation(header.Key, header.Value.AsEnumerable());
-            };
-            using var requestBodyStream = new MemoryStream();
-            await Request.Body.CopyToAsync(requestBodyStream);
-            Request.Body.Seek(0, SeekOrigin.Begin);
-            requestBodyStream.Seek(0, SeekOrigin.Begin);
-            req.Content = new StreamContent(requestBodyStream);
+            }
+            ;
+            req.Content = new ByteArrayContent(body);
             if (Request.Headers.ContainsKey("Content-Type"))
             {
                 req.Content.Headers.Add("Content-Type", Request.ContentType);
@@ -59,5 +67,27 @@ public class WebhookRelayController : Controller
         }
 
         return StatusCode((int)statusCode, resp);
+    }
+
+    private static (string Login, bool IsBot) GetSender(byte[] body)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(body);
+            var root = doc.RootElement;
+            if (root.ValueKind == JsonValueKind.Object
+                && root.TryGetProperty("sender", out var sender) && sender.ValueKind == JsonValueKind.Object)
+            {
+                var login = sender.TryGetProperty("login", out var l) && l.ValueKind == JsonValueKind.String
+                    ? l.GetString()
+                    : null;
+                var isBot = sender.TryGetProperty("type", out var t) && t.ValueKind == JsonValueKind.String
+                    && string.Equals(t.GetString(), "Bot", StringComparison.OrdinalIgnoreCase);
+                return (login, isBot);
+            }
+        }
+        catch (JsonException) { }
+
+        return (null, false);
     }
 }
