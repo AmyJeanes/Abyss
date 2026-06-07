@@ -71,7 +71,7 @@ jobs:
           abyss-models-persistentvolume . \
           --namespace default \
           --set name=abyss-models \
-          --set disk.capacity=16Mi \
+          --set disk.capacity=32Mi \
           --set volumeHandle=abyss-models \
           --set dataEngine=v2
       working-directory: infrastructure/kubernetes/charts/longhorn-persistentvolume
