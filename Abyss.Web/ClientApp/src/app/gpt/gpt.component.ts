@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,6 +30,7 @@ import { DialogService } from '../services';
     MatSliderModule,
     MatTooltipModule
 ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         GPTService,
     ],

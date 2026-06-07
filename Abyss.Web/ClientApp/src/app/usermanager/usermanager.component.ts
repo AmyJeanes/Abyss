@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -17,6 +17,7 @@ import { DialogService } from '../services';
     MatProgressSpinnerModule,
     MatButtonModule
 ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         UserManagerService,
     ]

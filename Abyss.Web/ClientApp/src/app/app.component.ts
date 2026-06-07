@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ThemePalette } from '@angular/material/core';
 import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
@@ -36,6 +36,7 @@ import { AccountDialogComponent } from './shared/account-dialog.component';
     MatInputModule,
     RouterModule
 ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         AuthService,
         UserService,

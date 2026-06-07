@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -24,6 +24,7 @@ import { DialogService } from '../services';
     MatCardModule,
     MatTooltipModule
 ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         OnlineService,
     ],

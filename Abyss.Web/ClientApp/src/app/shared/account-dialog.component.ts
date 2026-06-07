@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { IAuthScheme, IClientUserAuthentication, IClientUser } from '../app.data';
@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatListModule,
         MatButtonModule,
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         AuthService,
         UserService,

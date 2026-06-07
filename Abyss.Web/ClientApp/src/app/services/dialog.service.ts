@@ -1,4 +1,4 @@
-import { Component, Injectable, inject } from '@angular/core';
+import { Component, Injectable, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
@@ -84,6 +84,7 @@ export class DialogService {
       <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.closeButtonText}}</button>
     </div>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
     MatDialogModule,
     MatButtonModule
@@ -113,6 +114,7 @@ export class DialogAlertComponent {
       <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.confirmButtonText}}</button>
     </div>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
     FormsModule,
     MatDialogModule,
@@ -148,6 +150,7 @@ export class DialogConfirmComponent {
       <button mat-button color="accent" [mat-dialog-close]="data.value">{{data.acceptButtonText}}</button>
     </div>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
     FormsModule,
     MatInputModule,

@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { AuthService, DialogService } from './services';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: 'Please wait, logging in..',
 })
 export class LoginComponent implements OnInit {
