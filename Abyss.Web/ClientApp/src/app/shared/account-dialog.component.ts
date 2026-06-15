@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { IAuthScheme, IClientUserAuthentication, IClientUser } from '../app.data';
@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
         MatListModule,
         MatButtonModule,
     ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         AuthService,
         UserService,
@@ -30,6 +30,7 @@ export class AccountDialogComponent implements OnInit {
     authService = inject(AuthService);
     userService = inject(UserService);
     private dialogService = inject(DialogService);
+    private cdr = inject(ChangeDetectorRef);
 
     public schemes?: IAuthScheme[];
     public selected?: IAuthScheme;
@@ -55,6 +56,7 @@ export class AccountDialogComponent implements OnInit {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 
@@ -90,6 +92,7 @@ export class AccountDialogComponent implements OnInit {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 
@@ -104,6 +107,7 @@ export class AccountDialogComponent implements OnInit {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 }

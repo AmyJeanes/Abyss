@@ -84,7 +84,7 @@ export class DialogService {
       <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.closeButtonText}}</button>
     </div>
     `,
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
     MatDialogModule,
     MatButtonModule
@@ -114,7 +114,7 @@ export class DialogAlertComponent {
       <button mat-button color="accent" [mat-dialog-close]="true" cdkFocusInitial>{{data.confirmButtonText}}</button>
     </div>
     `,
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
     FormsModule,
     MatDialogModule,
@@ -150,7 +150,7 @@ export class DialogConfirmComponent {
       <button mat-button color="accent" [mat-dialog-close]="data.value">{{data.acceptButtonText}}</button>
     </div>
     `,
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
     FormsModule,
     MatInputModule,

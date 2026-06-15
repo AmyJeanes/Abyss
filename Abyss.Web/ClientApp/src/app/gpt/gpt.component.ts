@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +30,7 @@ import { DialogService } from '../services';
     MatSliderModule,
     MatTooltipModule
 ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         GPTService,
     ],
@@ -38,6 +38,7 @@ import { DialogService } from '../services';
 export class GPTComponent implements OnInit {
     private gptService = inject(GPTService);
     private dialogService = inject(DialogService);
+    private cdr = inject(ChangeDetectorRef);
 
     public name = 'Someone';
     public log: IGPTMessage[] = [];
@@ -85,6 +86,7 @@ export class GPTComponent implements OnInit {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 
@@ -110,6 +112,7 @@ export class GPTComponent implements OnInit {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 

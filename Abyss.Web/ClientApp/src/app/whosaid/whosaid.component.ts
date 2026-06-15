@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +22,7 @@ import { DialogService } from '../services';
     MatInputModule,
     MatButtonModule
 ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         WhoSaidService,
     ],
@@ -30,6 +30,7 @@ import { DialogService } from '../services';
 export class WhoSaidComponent {
     private whoSaidService = inject(WhoSaidService);
     private dialogService = inject(DialogService);
+    private cdr = inject(ChangeDetectorRef);
 
     public name = 'Someone';
     public log: IWhoSaid[] = [];
@@ -50,6 +51,7 @@ export class WhoSaidComponent {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 

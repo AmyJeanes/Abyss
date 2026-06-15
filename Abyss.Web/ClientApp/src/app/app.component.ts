@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ThemePalette } from '@angular/material/core';
 import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
@@ -36,7 +36,7 @@ import { AccountDialogComponent } from './shared/account-dialog.component';
     MatInputModule,
     RouterModule
 ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         AuthService,
         UserService,
@@ -65,6 +65,7 @@ export class AppComponent implements OnInit {
     private dialogService = inject(DialogService);
     private titleService = inject(TitleService);
     private activatedRoute = inject(ActivatedRoute);
+    private cdr = inject(ChangeDetectorRef);
 
     public Permissions = Permissions;
     constructor() {
@@ -80,6 +81,8 @@ export class AppComponent implements OnInit {
             )
             .subscribe((route: ActivatedRoute) => {
                 this.setPageTitle(route);
+                // OnPush: refresh nav tab highlighting and auth-dependent tabs on every navigation
+                this.cdr.markForCheck();
             });
     }
 
@@ -102,6 +105,7 @@ export class AppComponent implements OnInit {
                 });
             }
         }
+        this.cdr.markForCheck();
     }
 
     public get username(): string {
