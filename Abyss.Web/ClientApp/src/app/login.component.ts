@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService, DialogService } from './services';
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: 'Please wait, logging in..',
 })
 export class LoginComponent implements OnInit {

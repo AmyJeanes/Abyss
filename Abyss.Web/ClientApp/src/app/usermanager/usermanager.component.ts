@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -17,7 +17,7 @@ import { DialogService } from '../services';
     MatProgressSpinnerModule,
     MatButtonModule
 ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         UserManagerService,
     ]
@@ -25,6 +25,7 @@ import { DialogService } from '../services';
 export class UserManagerComponent implements OnInit {
     userManagerService = inject(UserManagerService);
     dialogService = inject(DialogService);
+    private cdr = inject(ChangeDetectorRef);
 
     public users: IUser[] = [];
     public displayedColumns = ['id', 'name', 'roleName', 'authTypes'];
@@ -46,6 +47,7 @@ export class UserManagerComponent implements OnInit {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 

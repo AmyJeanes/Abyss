@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, OnDestroy, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,7 +28,7 @@ import { DialogService } from '../services';
     MatInputModule,
     MatFormFieldModule
 ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         ServerManagerService
     ],
@@ -37,6 +37,7 @@ export class ServerManagerComponent implements OnInit, OnDestroy {
     serverManagerService = inject(ServerManagerService);
     dialogService = inject(DialogService);
     private ngZone = inject(NgZone);
+    private cdr = inject(ChangeDetectorRef);
 
     public servers?: IServer[];
     public ServerStatus = ServerStatus;
@@ -58,6 +59,7 @@ export class ServerManagerComponent implements OnInit, OnDestroy {
                 let selectedServer = this.selected;
                 if (!selectedServer) { return; }
                 selectedServer.StatusId = status;
+                this.cdr.markForCheck();
             });
         });
         this.hub.on('complete', (err: string) => {
@@ -69,28 +71,33 @@ export class ServerManagerComponent implements OnInit, OnDestroy {
                         message: err.toString(),
                     });
                 }
+                this.cdr.markForCheck();
             });
         });
         this.hub.on('log', (log: string) => {
             this.ngZone.run(() => {
                 this.log.push(log);
+                this.cdr.markForCheck();
             });
         });
         this.hub.onclose(() => {
             this.ngZone.run(() => {
                 this.hubReady = false;
+                this.cdr.markForCheck();
             });
         });
         this.hub.onreconnecting((err) => {
             this.ngZone.run(() => {
                 this.hubReady = false;
                 this.log.push(`Lost connection to server manager, attempting to reconnect...${err ? `\n${err}` : ''}`)
+                this.cdr.markForCheck();
             });
         });
         this.hub.onreconnected(() => {
             this.ngZone.run(() => {
                 this.hubReady = true;
                 this.log.push(`Reconnected to server manager`);
+                this.cdr.markForCheck();
             });
         });
     }
@@ -108,6 +115,7 @@ export class ServerManagerComponent implements OnInit, OnDestroy {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 
@@ -163,6 +171,7 @@ export class ServerManagerComponent implements OnInit, OnDestroy {
             });
         } finally {
             this.loading = false;
+            this.cdr.markForCheck();
         }
     }
 
@@ -182,6 +191,7 @@ export class ServerManagerComponent implements OnInit, OnDestroy {
             if (!isLoading) {
                 this.loading = false;
             }
+            this.cdr.markForCheck();
         }
     }
 }

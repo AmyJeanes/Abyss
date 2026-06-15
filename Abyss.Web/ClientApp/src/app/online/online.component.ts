@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
@@ -24,7 +24,7 @@ import { DialogService } from '../services';
     MatCardModule,
     MatTooltipModule
 ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         OnlineService,
     ],
@@ -33,6 +33,7 @@ export class OnlineComponent implements OnInit, OnDestroy {
     onlineService = inject(OnlineService);
     dialogService = inject(DialogService);
     private ngZone = inject(NgZone);
+    private cdr = inject(ChangeDetectorRef);
 
     public clients: ITeamSpeakClient[] = [];
     public displayedColumns = ['name', 'channelName', 'connectedTime', 'idleTime'];
@@ -49,6 +50,7 @@ export class OnlineComponent implements OnInit, OnDestroy {
             this.ngZone.run(() => {
                 this.channels = channels;
                 this.clients = clients;
+                this.cdr.markForCheck();
             });
         });
         this.hub.onclose(() => {
@@ -107,6 +109,7 @@ export class OnlineComponent implements OnInit, OnDestroy {
             if (!isLoading) {
                 this.loading = false;
             }
+            this.cdr.markForCheck();
         }
     }
 
